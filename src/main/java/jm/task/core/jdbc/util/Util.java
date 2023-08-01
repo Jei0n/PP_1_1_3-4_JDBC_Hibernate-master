@@ -7,10 +7,13 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 import jm.task.core.jdbc.model.User;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
+
+import javax.imageio.spi.ServiceRegistry;
 
 public class Util {
     // реализуйте настройку соеденения с БД
@@ -18,24 +21,37 @@ public class Util {
     private static final String DB_USERNAME = "root";
     private static final String DB_PASSWORD = "11082000";
 
+    private static SessionFactory sessionFactory;
+
 
     public static SessionFactory getSessionFactory() {
-        Configuration configuration = new Configuration();
-        Properties properties = new Properties();
-        properties.put(Environment.DRIVER, "com.mysql.cj.jdbc.Driver");
-        properties.put(Environment.URL, DB_URL);
-        properties.put(Environment.USER, DB_USERNAME);
-        properties.put(Environment.PASS, DB_PASSWORD);
-        properties.put(Environment.DIALECT, "org.hibernate.dialect.MySQLDialect");
-        properties.put(Environment.SHOW_SQL, "true");
-        properties.put(Environment.CURRENT_SESSION_CONTEXT_CLASS, "thread");
-        configuration.setProperties(properties);
+        if (sessionFactory == null) { // т.е. если SessionFactory нет, то
+            try {
+                Properties properties= new Properties(); // Чтобы вручную конфигурировать создание SessionFactory,
+                // мы пишем свойства. Properties устроен, как Map - содержит пары "ключ-значение".
+                // Можно переместить их в отдельный файл. Либо можно написать отдельный класс с конфигурациями.
 
-        configuration.addAnnotatedClass(User.class);
+                //Вносим свойства. Интерфейс Environment - это окружение, в котором приложение запущено.
+                properties.put(Environment.DRIVER, "com.mysql.cj.jdbc.Driver"); // Драйвер д/БД
+                properties.put(Environment.URL, "jdbc:mysql://localhost:3306/javapp"); // Ссылка к БД
+                properties.put(Environment.USER, "root");
+                properties.put(Environment.PASS, "11082000");
+                properties.put(Environment.DIALECT, "org.hibernate.dialect.MySQL5Dialect"); // Тип СУБД
+                properties.put(Environment.SHOW_SQL, "true"); // Hibernate будет дублировать в консоль все запросы, которые выполняет
+                properties.put(Environment.CURRENT_SESSION_CONTEXT_CLASS, "thread"); //класс текущей сессии???
+                properties.put(Environment.HBM2DDL_AUTO, "validate"); //Это свойство, обеспечивающее проверку
+                // или экспорт ddl схемы при создании SessionFactory
 
 
-        SessionFactory sessionFactory = configuration.addAnnotatedClass(User.class).addProperties(configuration.getProperties()).buildSessionFactory();
+                sessionFactory = new Configuration() //Создаем экземпляр Configuration
+                        .addProperties(properties) //или setProperties() ? // Вносим в эту конфигурацию свойства
+                        .addAnnotatedClass(User.class) // Указываем, какой Entity-класс использовать
+                        .buildSessionFactory(); // Создаем SessionFactory
 
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         return sessionFactory;
     }
 
