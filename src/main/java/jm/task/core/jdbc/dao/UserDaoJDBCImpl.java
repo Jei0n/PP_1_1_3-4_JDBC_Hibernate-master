@@ -76,6 +76,7 @@ public class UserDaoJDBCImpl implements UserDao {
             System.out.println("При попытке достать всех пользователей из базы данных произошло исключение\n" + e.getMessage());
         }
         return list;
+
     }
 
     public void cleanUsersTable() {
