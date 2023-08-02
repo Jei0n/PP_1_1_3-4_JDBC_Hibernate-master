@@ -39,7 +39,7 @@ public class Util {
                 properties.put(Environment.DIALECT, "org.hibernate.dialect.MySQL5Dialect"); // Тип СУБД
                 properties.put(Environment.SHOW_SQL, "true"); // Hibernate будет дублировать в консоль все запросы, которые выполняет
                 properties.put(Environment.CURRENT_SESSION_CONTEXT_CLASS, "thread"); //класс текущей сессии???
-                properties.put(Environment.HBM2DDL_AUTO, "validate"); //Это свойство, обеспечивающее проверку
+                properties.put(Environment.HBM2DDL_AUTO, "create-drop"); //Это свойство, обеспечивающее проверку
                 // или экспорт ddl схемы при создании SessionFactory
 
 
