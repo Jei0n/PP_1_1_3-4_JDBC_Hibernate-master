@@ -1,5 +1,6 @@
 package jm.task.core.jdbc;
 import jm.task.core.jdbc.dao.UserDao;
+import jm.task.core.jdbc.dao.UserDaoHibernateImpl;
 import jm.task.core.jdbc.dao.UserDaoJDBCImpl;
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.service.UserServiceImpl;
@@ -60,7 +61,7 @@ public class Main {
 //            e.printStackTrace();
 //        }
         Util.getConnection();
-        UserDao userDao = new UserDaoJDBCImpl();
+        UserDao userDao = new UserDaoHibernateImpl();
 
         userDao.createUsersTable();
 
@@ -69,10 +70,10 @@ public class Main {
         userDao.saveUser("Name3", "LastName3", (byte) 31);
         userDao.saveUser("Name4", "LastName4", (byte) 38);
 
-        userDao.removeUserById(1);
-        List<User> allUsers = userDao.getAllUsers();
-        System.out.println(allUsers.toString());
-        userDao.cleanUsersTable();
-        userDao.dropUsersTable();
+//        userDao.removeUserById(1);
+//        List<User> allUsers = userDao.getAllUsers();
+//        System.out.println(allUsers.toString());
+//        userDao.cleanUsersTable();
+//        userDao.dropUsersTable();
     }
 }
